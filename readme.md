@@ -10,7 +10,6 @@
 - [Install](#install)
 - [Usage](#usage)
   - [Usage - ChatGPTAPI](#usage---chatgptapi)
-  - [Usage - ChatGPTUnofficialProxyAPI](#usage---chatgptunofficialproxyapi)
     - [Reverse Proxy](#reverse-proxy)
     - [Access Token](#access-token)
 - [Docs](#docs)
@@ -54,68 +53,9 @@ We still support both the official ChatGPT API and the unofficial proxy API, but
 | Method                      | Free?  | Robust? | Quality?                        |
 | --------------------------- | ------ | ------- | ------------------------------- |
 | `ChatGPTAPI`                | ❌ No  | ✅ Yes  | ✅️ Real ChatGPT models + GPT-4 |
-| `ChatGPTUnofficialProxyAPI` | ✅ Yes | ❌ No️  | ✅ ChatGPT webapp               |
 
-**Note**: We strongly recommend using `ChatGPTAPI` since it uses the officially supported API from OpenAI. We will likely remove support for `ChatGPTUnofficialProxyAPI` in a future release.
 
 1. `ChatGPTAPI` - Uses the `gpt-3.5-turbo` model with the official OpenAI chat completions API (official, robust approach, but it's not free)
-2. `ChatGPTUnofficialProxyAPI` - Uses an unofficial proxy server to access ChatGPT's backend API in a way that circumvents Cloudflare (uses the real ChatGPT and is pretty lightweight, but relies on a third-party server and is rate-limited)
-
-</details>
-
-<details>
-<summary><strong>Previous Updates</strong></summary>
-
-<br/>
-
-<details>
-<summary><strong>March 1, 2023</strong></summary>
-
-<br/>
-
-The [official OpenAI chat completions API](https://platform.openai.com/docs/guides/chat) has been released, and it is now the default for this package! 🔥
-
-| Method                      | Free?  | Robust?  | Quality?                |
-| --------------------------- | ------ | -------- | ----------------------- |
-| `ChatGPTAPI`                | ❌ No  | ✅ Yes   | ✅️ Real ChatGPT models |
-| `ChatGPTUnofficialProxyAPI` | ✅ Yes | ☑️ Maybe | ✅ Real ChatGPT         |
-
-**Note**: We strongly recommend using `ChatGPTAPI` since it uses the officially supported API from OpenAI. We may remove support for `ChatGPTUnofficialProxyAPI` in a future release.
-
-1. `ChatGPTAPI` - Uses the `gpt-3.5-turbo` model with the official OpenAI chat completions API (official, robust approach, but it's not free)
-2. `ChatGPTUnofficialProxyAPI` - Uses an unofficial proxy server to access ChatGPT's backend API in a way that circumvents Cloudflare (uses the real ChatGPT and is pretty lightweight, but relies on a third-party server and is rate-limited)
-
-</details>
-
-<details>
-<summary><strong>Feb 19, 2023</strong></summary>
-
-<br/>
-
-We now provide three ways of accessing the unofficial ChatGPT API, all of which have tradeoffs:
-
-| Method                      | Free?  | Robust?  | Quality?          |
-| --------------------------- | ------ | -------- | ----------------- |
-| `ChatGPTAPI`                | ❌ No  | ✅ Yes   | ☑️ Mimics ChatGPT |
-| `ChatGPTUnofficialProxyAPI` | ✅ Yes | ☑️ Maybe | ✅ Real ChatGPT   |
-| `ChatGPTAPIBrowser` (v3)    | ✅ Yes | ❌ No    | ✅ Real ChatGPT   |
-
-**Note**: I recommend that you use either `ChatGPTAPI` or `ChatGPTUnofficialProxyAPI`.
-
-1. `ChatGPTAPI` - (Used to use) `text-davinci-003` to mimic ChatGPT via the official OpenAI completions API (most robust approach, but it's not free and doesn't use a model fine-tuned for chat)
-2. `ChatGPTUnofficialProxyAPI` - Uses an unofficial proxy server to access ChatGPT's backend API in a way that circumvents Cloudflare (uses the real ChatGPT and is pretty lightweight, but relies on a third-party server and is rate-limited)
-3. `ChatGPTAPIBrowser` - (_deprecated_; v3.5.1 of this package) Uses Puppeteer to access the official ChatGPT webapp (uses the real ChatGPT, but very flaky, heavyweight, and error prone)
-
-</details>
-
-<details>
-<summary><strong>Feb 5, 2023</strong></summary>
-
-<br/>
-
-OpenAI has disabled the leaked chat model we were previously using, so we're now defaulting to `text-davinci-003`, which is not free.
-
-We've found several other hidden, fine-tuned chat models, but OpenAI keeps disabling them, so we're searching for alternative workarounds.
 
 </details>
 
@@ -136,8 +76,6 @@ const api = new ChatGPTAPI({
 const res = await api.sendMessage('Hello World!')
 console.log(res.text)
 ```
-
-Please upgrade to `chatgpt@latest` (at least [v4.0.0](https://github.com/transitive-bullshit/chatgpt-api/releases/tag/v4.0.0)). The updated version is **significantly more lightweight and robust** compared with previous versions. You also don't have to worry about IP issues or rate limiting.
 
 Huge shoutout to [@waylaidwanderer](https://github.com/waylaidwanderer) for discovering the leaked chat model!
 
@@ -210,7 +148,6 @@ To use this module from Node.js, you need to pick between two methods:
 | Method                      | Free?  | Robust? | Quality?                        |
 | --------------------------- | ------ | ------- | ------------------------------- |
 | `ChatGPTAPI`                | ❌ No  | ✅ Yes  | ✅️ Real ChatGPT models + GPT-4 |
-| `ChatGPTUnofficialProxyAPI` | ✅ Yes | ❌ No️  | ✅ Real ChatGPT webapp          |
 
 1. `ChatGPTAPI` - Uses the `gpt-3.5-turbo` model with the official OpenAI chat completions API (official, robust approach, but it's not free). You can override the model, completion params, and system message to fully customize your assistant.
 
@@ -336,51 +273,6 @@ async function example() {
 
 </details>
 
-### Usage - ChatGPTUnofficialProxyAPI
-
-The API for `ChatGPTUnofficialProxyAPI` is almost exactly the same. You just need to provide a ChatGPT `accessToken` instead of an OpenAI API key.
-
-```ts
-import { ChatGPTUnofficialProxyAPI } from 'chatgpt'
-
-async function example() {
-  const api = new ChatGPTUnofficialProxyAPI({
-    accessToken: process.env.OPENAI_ACCESS_TOKEN
-  })
-
-  const res = await api.sendMessage('Hello World!')
-  console.log(res.text)
-}
-```
-
-See [demos/demo-reverse-proxy](./demos/demo-reverse-proxy.ts) for a full example:
-
-```bash
-npx tsx demos/demo-reverse-proxy.ts
-```
-
-`ChatGPTUnofficialProxyAPI` messages also contain a `conversationid` in addition to `parentMessageId`, since the ChatGPT webapp can't reference messages across different accounts & conversations.
-
-#### Reverse Proxy
-
-You can override the reverse proxy by passing `apiReverseProxyUrl`:
-
-```ts
-const api = new ChatGPTUnofficialProxyAPI({
-  accessToken: process.env.OPENAI_ACCESS_TOKEN,
-  apiReverseProxyUrl: 'https://your-example-server.com/api/conversation'
-})
-```
-
-Known reverse proxies run by community members include:
-
-| Reverse Proxy URL                                 | Author                                       | Rate Limits                  | Last Checked |
-| ------------------------------------------------- | -------------------------------------------- | ---------------------------- | ------------ |
-| `https://ai.fakeopen.com/api/conversation` | [@pengzhile](https://github.com/pengzhile)   | 5 req / 10 seconds by IP     | 4/18/2023    |
-| `https://api.pawan.krd/backend-api/conversation`  | [@PawanOsman](https://github.com/PawanOsman) | 50 req / 15 seconds (~3 r/s) | 3/23/2023    |
-
-Note: info on how the reverse proxies work is not being published at this time in order to prevent OpenAI from disabling access.
-
 #### Access Token
 
 To use `ChatGPTUnofficialProxyAPI`, you'll need an OpenAI access token from the ChatGPT webapp. To do this, you can use any of the following methods which take an `email` and `password` and return an access token:
@@ -443,8 +335,6 @@ npx tsx demos/demo-persistence.ts
 Any [keyv adaptor](https://github.com/jaredwray/keyv) is supported for persistence, and there are overrides if you'd like to use a different way of storing / retrieving messages.
 
 Note that persisting message is required for remembering the context of previous conversations beyond the scope of the current Node.js process, since by default, we only store messages in memory. Here's an [external demo](https://github.com/transitive-bullshit/chatgpt-twitter-bot/blob/main/src/index.ts#L86-L95) of using a completely custom database solution to persist messages.
-
-**Note**: Persistence is handled automatically when using `ChatGPTUnofficialProxyAPI` because it is connecting indirectly to ChatGPT.
 
 ## Projects
 
